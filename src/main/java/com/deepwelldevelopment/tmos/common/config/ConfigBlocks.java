@@ -1,5 +1,6 @@
 package com.deepwelldevelopment.tmos.common.config;
 
+import com.deepwelldevelopment.tmos.common.block.BlockGenerator;
 import com.deepwelldevelopment.tmos.common.block.BlockWorkbench;
 import com.deepwelldevelopment.tmos.common.block.TMOSOre;
 import com.deepwelldevelopment.tmos.common.item.ItemOreDict;
@@ -37,6 +38,7 @@ public class ConfigBlocks {
         oreChromium.setHarvestLevel("pickaxe", Item.ToolMaterial.DIAMOND.getHarvestLevel());
 
         tmosWorkbench = registerBlock(new BlockWorkbench());
+        coalGenerator = registerBlock(new BlockGenerator("generatorCoal"));
     }
 
     private static <T extends Block>T registerBlock(T block, ItemBlock itemBlock) {
