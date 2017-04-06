@@ -5,6 +5,8 @@ import com.deepwelldevelopment.tmos.lib.gui.element.TabBase;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -18,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import static org.lwjgl.opengl.GL11.GL_QUADS;
 
 
 /**
@@ -627,7 +631,7 @@ public class GuiBase extends GuiContainer {
         tessellator.draw();
     }
 
-    public void drawScaledTexturedModelRectFromIcon(int x, int y, IIcon icon, int width, int height) {
+    public void drawScaledTexturedModelRectFromIcon(int x, int y,  icon, int width, int height) {
 
         if (icon == null) {
             return;
@@ -637,12 +641,13 @@ public class GuiBase extends GuiContainer {
         double minV = icon.getMinV();
         double maxV = icon.getMaxV();
 
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV(x + 0, y + height, this.zLevel, minU, minV + (maxV - minV) * height / 16F);
-        tessellator.addVertexWithUV(x + width, y + height, this.zLevel, minU + (maxU - minU) * width / 16F, minV + (maxV - minV) * height / 16F);
-        tessellator.addVertexWithUV(x + width, y + 0, this.zLevel, minU + (maxU - minU) * width / 16F, minV);
-        tessellator.addVertexWithUV(x + 0, y + 0, this.zLevel, minU, minV);
+        Tessellator tessellator = Tessellator.getInstance();
+        VertexBuffer vertexBuffer = tessellator.getBuffer();
+        vertexBuffer.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        vertexBuffer.pos(x + 0, y + height, this.zLevel).tex(minU, minV + (maxV - minV) * height / 16F).endVertex();
+        vertexBuffer.pos(x + width, y + height, this.zLevel).tex(minU + (maxU - minU) * width / 16F, minV + (maxV - minV) * height / 16F).endVertex();
+        vertexBuffer.pos(x + width, y + 0, this.zLevel).tex(minU + (maxU - minU) * width / 16F, minV).endVertex();
+        vertexBuffer.pos(x + 0, y + 0, this.zLevel).tex(minU, minV).endVertex();
         tessellator.draw();
     }
 

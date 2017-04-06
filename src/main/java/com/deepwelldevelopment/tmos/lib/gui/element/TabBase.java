@@ -1,10 +1,14 @@
 package com.deepwelldevelopment.tmos.lib.gui.element;
 
 import com.deepwelldevelopment.tmos.lib.gui.GuiBase;
+import com.deepwelldevelopment.tmos.lib.gui.GuiProps;
+import com.deepwelldevelopment.tmos.lib.gui.TabTracker;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class TabBase extends ElementBase {
 

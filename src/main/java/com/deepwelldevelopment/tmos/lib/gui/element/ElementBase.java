@@ -3,7 +3,8 @@ package com.deepwelldevelopment.tmos.lib.gui.element;
 import com.deepwelldevelopment.tmos.lib.gui.GuiBase;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
@@ -128,13 +129,14 @@ public abstract class ElementBase {
         glClearStencil(0);
         glClear(GL_STENCIL_BUFFER_BIT);
 
-        Tessellator.getInstance().getBuffer().begin(GL_QUADS, VertexFormat.);
-        Tessellator.instance.addVertex(xStart, yEnd, 0);
-        Tessellator.instance.addVertex(xEnd, yEnd, 0);
-        Tessellator.instance.addVertex(xEnd, yStart, 0);
-        Tessellator.instance.addVertex(xStart, yStart, 0);
-        Tessellator.instance.draw();
-
+        Tessellator tessellator = Tessellator.getInstance();
+        VertexBuffer vertexBuffer = tessellator.getBuffer();
+        vertexBuffer.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        vertexBuffer.pos(xStart, yEnd, 0);
+        vertexBuffer.pos(xEnd, yEnd, 0);
+        vertexBuffer.pos(xEnd, yStart, 0);
+        vertexBuffer.pos(xStart, yStart, 0);
+        tessellator.draw();
         glEnable(GL_TEXTURE_2D);
         glStencilFunc(GL_EQUAL, flag, flag);
         glStencilMask(0);
