@@ -104,7 +104,6 @@ public abstract class TabBase extends ElementBase {
 
     @Override
     public void drawBackground(int mouseX, int mouseY, float gameTicks) {
-
         mouseX -= this.posX();
         mouseY -= this.posY;
 
@@ -125,7 +124,6 @@ public abstract class TabBase extends ElementBase {
 
     @Override
     public void drawForeground(int mouseX, int mouseY) {
-
         mouseX -= this.posX();
         mouseY -= this.posY;
 
@@ -146,7 +144,6 @@ public abstract class TabBase extends ElementBase {
 
     @Override
     public void update(int mouseX, int mouseY) {
-
         super.update(mouseX, mouseY);
 
         mouseX -= this.posX();
@@ -162,7 +159,6 @@ public abstract class TabBase extends ElementBase {
 
     @Override
     public void update() {
-
         if (open && currentWidth < maxWidth) {
             currentWidth += tabExpandSpeed;
         } else if (!open && currentWidth > minWidth) {
@@ -189,7 +185,6 @@ public abstract class TabBase extends ElementBase {
     }
 
     protected void drawTabIcon(String iconName) {
-
         gui.drawIcon(iconName, posXOffset(), posY + 3, 1);
     }
 
@@ -197,7 +192,6 @@ public abstract class TabBase extends ElementBase {
      * Shortcut to correct for the proper X position.
      */
     protected int posX() {
-
         if (side == LEFT) {
             return posX - currentWidth;
         }
@@ -208,17 +202,14 @@ public abstract class TabBase extends ElementBase {
      * Corrects for shadowing differences in tabs to ensure that they always look nice - used in font rendering, typically.
      */
     protected int posXOffset() {
-
         return posX() + sideOffset();
     }
 
     protected int sideOffset() {
-
         return (side == LEFT ? 4 : 2);
     }
 
     public boolean intersectsWith(int mouseX, int mouseY, int shiftX, int shiftY) {
-
         shiftX += offsetX;
         shiftY += offsetY;
 
@@ -233,12 +224,10 @@ public abstract class TabBase extends ElementBase {
     }
 
     public boolean isFullyOpened() {
-
         return fullyOpen;
     }
 
     public void setCurrentShift(int x, int y) {
-
         updateElements();
 
         currentShiftX = x + offsetX;
@@ -246,7 +235,6 @@ public abstract class TabBase extends ElementBase {
     }
 
     public void setFullyOpen() {
-
         open = true;
         currentWidth = maxWidth;
         currentHeight = maxHeight;
@@ -256,7 +244,6 @@ public abstract class TabBase extends ElementBase {
     }
 
     public void toggleOpen() {
-
         if (open) {
             open = false;
             if (side == LEFT) {
@@ -278,7 +265,6 @@ public abstract class TabBase extends ElementBase {
     }
 
     public Rectangle4i getBounds() {
-
         if (isVisible()) {
             return new Rectangle4i(posX() + gui.getGuiLeft(), posY + gui.getGuiTop(), currentWidth, currentHeight);
         } else {
@@ -289,13 +275,11 @@ public abstract class TabBase extends ElementBase {
 
     /* Elements */
     public ElementBase addElement(ElementBase element) {
-
         elements.add(element);
         return element;
     }
 
     protected ElementBase getElementAtPosition(int mX, int mY) {
-
         for (int i = elements.size(); i-- > 0;) {
             ElementBase element = elements.get(i);
             if (element.intersectsWith(mX, mY)) {
@@ -309,7 +293,6 @@ public abstract class TabBase extends ElementBase {
 
     @Override
     public boolean onMouseWheel(int mouseX, int mouseY, int movement) {
-
         int wheelMovement = Mouse.getEventDWheel();
 
         mouseX -= this.posX();
@@ -332,7 +315,6 @@ public abstract class TabBase extends ElementBase {
 
     @Override
     public void addTooltip(List<String> list) {
-
         for (int i = 0; i < this.elements.size(); i++) {
             ElementBase c = elements.get(i);
 
@@ -345,7 +327,6 @@ public abstract class TabBase extends ElementBase {
 
     @Override
     public boolean onKeyTyped(char characterTyped, int keyPressed) {
-
         for (int i = elements.size(); i-- > 0;) {
             ElementBase c = elements.get(i);
             if (!c.isVisible() || !c.isEnabled()) {

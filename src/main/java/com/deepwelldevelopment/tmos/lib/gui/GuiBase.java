@@ -2,6 +2,7 @@ package com.deepwelldevelopment.tmos.lib.gui;
 
 import com.deepwelldevelopment.tmos.lib.gui.element.ElementBase;
 import com.deepwelldevelopment.tmos.lib.gui.element.TabBase;
+import com.deepwelldevelopment.tmos.lib.helper.RenderHelper;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
@@ -16,11 +17,13 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.lwjgl.opengl.GL11.GL_Q;
 import static org.lwjgl.opengl.GL11.GL_QUADS;
 
 
@@ -37,6 +40,8 @@ public class GuiBase extends GuiContainer {
     protected boolean drawInventory = true;
     protected int mouseX = 0;
     protected int mouseY = 0;
+
+    protected int lastIndex = -1;
 
     protected String name;
     protected ResourceLocation texture;
@@ -101,7 +106,7 @@ public class GuiBase extends GuiContainer {
     }
 
     @Override
-    protected void keyTyped(char characterTyped, int keyPressed) {
+    protected void keyTyped(char characterTyped, int keyPressed) throws IOException {
         for (int i = elements.size(); i-- > 0;) {
             ElementBase c = elements.get(i);
             if (!c.isVisible() || !c.isEnabled()) {
@@ -115,7 +120,7 @@ public class GuiBase extends GuiContainer {
     }
 
     @Override
-    public void handleMouseInput() {
+    public void handleMouseInput() throws IOException {
 
         int x = Mouse.getEventX() * width / mc.displayWidth;
         int y = height - Mouse.getEventY() * height / mc.displayHeight - 1;
@@ -148,7 +153,7 @@ public class GuiBase extends GuiContainer {
     }
 
     @Override
-    protected void mouseClicked(int mX, int mY, int mouseButton) {
+    protected void mouseClicked(int mX, int mY, int mouseButton) throws IOException {
         mX -= guiLeft;
         mY -= guiTop;
 
@@ -205,31 +210,9 @@ public class GuiBase extends GuiContainer {
     }
 
     @Override
-    protected void mouseMovedOrUp(int mX, int mY, int mouseButton) {
-
-        mX -= guiLeft;
-        mY -= guiTop;
-
-        if (mouseButton >= 0 && mouseButton <= 2) { // 0:left, 1:right, 2: middle
-            for (int i = elements.size(); i-- > 0;) {
-                ElementBase c = elements.get(i);
-                if (!c.isVisible() || !c.isEnabled()) { // no bounds checking on mouseUp events
-                    continue;
-                }
-                c.onMouseReleased(mX, mY);
-            }
-        }
-        mX += guiLeft;
-        mY += guiTop;
-
-        super.mouseMovedOrUp(mX, mY, mouseButton);
-    }
-
-    @Override
     protected void mouseClickMove(int mX, int mY, int lastClick, long timeSinceClick) {
-
         Slot slot = getSlotAtPosition(mX, mY);
-        ItemStack itemstack = this.mc.thePlayer.inventory.getItemStack();
+        ItemStack itemstack = this.mc.player.inventory.getItemStack();
 
         if (this.field_147007_t && slot != null && itemstack != null && slot instanceof SlotFalseCopy) {
             if (lastIndex != slot.slotNumber) {
@@ -243,7 +226,6 @@ public class GuiBase extends GuiContainer {
     }
 
     public Slot getSlotAtPosition(int xCoord, int yCoord) {
-
         for (int k = 0; k < this.inventorySlots.inventorySlots.size(); ++k) {
             Slot slot = (Slot) this.inventorySlots.inventorySlots.get(k);
 
@@ -255,15 +237,13 @@ public class GuiBase extends GuiContainer {
     }
 
     public boolean isMouseOverSlot(Slot theSlot, int xCoord, int yCoord) {
-
-        return this.func_146978_c(theSlot.xDisplayPosition, theSlot.yDisplayPosition, 16, 16, xCoord, yCoord);
+        return this.isPointInRegion(theSlot.xPos, theSlot.yPos, 16, 16, xCoord, yCoord);
     }
 
     /**
      * Draws the elements for this GUI.
      */
     protected void drawElements(float partialTick, boolean foreground) {
-
         if (foreground) {
             for (int i = 0; i < elements.size(); i++) {
                 ElementBase element = elements.get(i);
@@ -285,7 +265,6 @@ public class GuiBase extends GuiContainer {
      * Draws the tabs for this GUI. Handles Tab open/close animation.
      */
     protected void drawTabs(float partialTick, boolean foreground) {
-
         int yPosRight = 4;
         int yPosLeft = 4;
 
@@ -329,15 +308,13 @@ public class GuiBase extends GuiContainer {
      */
     // @Override
     public List<String> handleTooltip(int mousex, int mousey, List<String> tooltip) {
-
-        if (mc.thePlayer.inventory.getItemStack() == null) {
+        if (mc.player.inventory.getItemStack() == null) {
             addTooltips(tooltip);
         }
         return tooltip;
     }
 
     public void addTooltips(List<String> tooltip) {
-
         TabBase tab = getTabAtPosition(mouseX, mouseY);
 
         if (tab != null) {
@@ -352,13 +329,11 @@ public class GuiBase extends GuiContainer {
 
     /* ELEMENTS */
     public ElementBase addElement(ElementBase element) {
-
         elements.add(element);
         return element;
     }
 
     public TabBase addTab(TabBase tab) {
-
         int yOffset = 4;
         for (int i = 0; i < tabs.size(); i++) {
             if (tabs.get(i).side == tab.side && tabs.get(i).isVisible()) {
@@ -377,7 +352,6 @@ public class GuiBase extends GuiContainer {
     }
 
     protected ElementBase getElementAtPosition(int mX, int mY) {
-
         for (int i = elements.size(); i-- > 0;) {
             ElementBase element = elements.get(i);
             if (element.intersectsWith(mX, mY)) {
@@ -388,7 +362,6 @@ public class GuiBase extends GuiContainer {
     }
 
     protected TabBase getTabAtPosition(int mX, int mY) {
-
         int xShift = 0;
         int yShift = 4;
 
@@ -422,7 +395,6 @@ public class GuiBase extends GuiContainer {
     }
 
     protected final void updateElements() {
-
         for (int i = elements.size(); i-- > 0;) {
             ElementBase c = elements.get(i);
             if (c.isVisible() && c.isEnabled()) {
@@ -436,12 +408,10 @@ public class GuiBase extends GuiContainer {
     }
 
     public void handleElementButtonClick(String buttonName, int mouseButton) {
-
     }
 
     /* HELPERS */
     public void bindTexture(ResourceLocation texture) {
-
         mc.renderEngine.bindTexture(texture);
     }
 
@@ -449,7 +419,6 @@ public class GuiBase extends GuiContainer {
      * Abstract method to retrieve icons by name from a registry. You must override this if you use any of the String methods below.
      */
     public IIcon getIcon(String name) {
-
         return null;
     }
 
@@ -457,17 +426,14 @@ public class GuiBase extends GuiContainer {
      * Essentially a placeholder method for tabs to use should they need to draw a button.
      */
     public void drawButton(IIcon icon, int x, int y, int spriteSheet, int mode) {
-
         drawIcon(icon, x, y, spriteSheet);
     }
 
     public void drawButton(String iconName, int x, int y, int spriteSheet, int mode) {
-
         drawButton(getIcon(iconName), x, y, spriteSheet, mode);
     }
 
     public void drawItemStack(ItemStack stack, int x, int y, boolean drawOverlay, String overlayTxt) {
-
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glPushMatrix();
@@ -483,10 +449,11 @@ public class GuiBase extends GuiContainer {
             font = fontRendererObj;
         }
 
-        itemRender.renderItemAndEffectIntoGUI(font, this.mc.getTextureManager(), stack, x, y);
+        itemRender.renderItemAndEffectIntoGUI(stack, x, y);
 
         if (drawOverlay) {
             itemRender.renderItemOverlayIntoGUI(font, this.mc.getTextureManager(), stack, x, y - (this.draggedStack == null ? 0 : 8), overlayTxt);
+            itemRender.renderItemOverlayIntoGUI(font, stack, x, y - (this.));
         }
 
         this.zLevel = 0.0F;
@@ -499,11 +466,9 @@ public class GuiBase extends GuiContainer {
      * Simple method used to draw a fluid of arbitrary size.
      */
     public void drawFluid(int x, int y, FluidStack fluid, int width, int height) {
-
         if (fluid == null || fluid.getFluid() == null) {
             return;
         }
-        RenderHelper.setBlockTextureSheet();
         RenderHelper.setColor3ub(fluid.getFluid().getColor(fluid));
 
         drawTiledTexture(x, y, fluid.getFluid().getIcon(fluid), width, height);
@@ -549,12 +514,10 @@ public class GuiBase extends GuiContainer {
     }
 
     public void drawIcon(String iconName, int x, int y, int spriteSheet) {
-
         drawIcon(getIcon(iconName), x, y, spriteSheet);
     }
 
     public void drawSizedModalRect(int x1, int y1, int x2, int y2, int color) {
-
         int temp;
 
         if (x1 < x2) {
@@ -572,23 +535,23 @@ public class GuiBase extends GuiContainer {
         float r = (color >> 16 & 255) / 255.0F;
         float g = (color >> 8 & 255) / 255.0F;
         float b = (color & 255) / 255.0F;
-        Tessellator tessellator = Tessellator.instance;
+        Tessellator tessellator = Tessellator.getInstance();
+        VertexBuffer vertexBuffer = tessellator.getBuffer();
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glColor4f(r, g, b, a);
-        tessellator.startDrawingQuads();
-        tessellator.addVertex(x1, y2, this.zLevel);
-        tessellator.addVertex(x2, y2, this.zLevel);
-        tessellator.addVertex(x2, y1, this.zLevel);
-        tessellator.addVertex(x1, y1, this.zLevel);
+        vertexBuffer.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        vertexBuffer.pos(x1, y2, this.zLevel).endVertex();
+        vertexBuffer.pos(x2, y2, this.zLevel).endVertex();
+        vertexBuffer.pos(x2, y1, this.zLevel).endVertex();
+        vertexBuffer.pos(x1, y1, this.zLevel).endVertex();
         tessellator.draw();
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_BLEND);
     }
 
     public void drawSizedRect(int x1, int y1, int x2, int y2, int color) {
-
         int temp;
 
         if (x1 < x2) {
@@ -606,32 +569,33 @@ public class GuiBase extends GuiContainer {
         float r = (color >> 16 & 255) / 255.0F;
         float g = (color >> 8 & 255) / 255.0F;
         float b = (color & 255) / 255.0F;
-        Tessellator tessellator = Tessellator.instance;
+        Tessellator tessellator = Tessellator.getInstance();
+        VertexBuffer vertexBuffer = tessellator.getBuffer();
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glColor4f(r, g, b, a);
-        tessellator.startDrawingQuads();
-        tessellator.addVertex(x1, y2, this.zLevel);
-        tessellator.addVertex(x2, y2, this.zLevel);
-        tessellator.addVertex(x2, y1, this.zLevel);
-        tessellator.addVertex(x1, y1, this.zLevel);
+        vertexBuffer.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        vertexBuffer.pos(x1, y2, this.zLevel).endVertex();
+        vertexBuffer.pos(x2, y2, this.zLevel).endVertex();
+        vertexBuffer.pos(x2, y1, this.zLevel).endVertex();
+        vertexBuffer.pos(x1, y1, this.zLevel).endVertex();
         tessellator.draw();
         GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
 
     public void drawSizedTexturedModalRect(int x, int y, int u, int v, int width, int height, float texW, float texH) {
-
         float texU = 1 / texW;
         float texV = 1 / texH;
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV(x + 0, y + height, this.zLevel, (u + 0) * texU, (v + height) * texV);
-        tessellator.addVertexWithUV(x + width, y + height, this.zLevel, (u + width) * texU, (v + height) * texV);
-        tessellator.addVertexWithUV(x + width, y + 0, this.zLevel, (u + width) * texU, (v + 0) * texV);
-        tessellator.addVertexWithUV(x + 0, y + 0, this.zLevel, (u + 0) * texU, (v + 0) * texV);
+        Tessellator tessellator = Tessellator.getInstance();
+        VertexBuffer vertexBuffer = tessellator.getBuffer();
+        vertexBuffer.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        vertexBuffer.pos(x, y + height, this.zLevel).tex((u) * texU, (v + height) * texV).endVertex();
+        vertexBuffer.pos(x + width, y + height, this.zLevel).tex((u + width) * texU, (v + height) * texV).endVertex();
+        vertexBuffer.pos(x + width, y, this.zLevel).tex((u + width) * texU, (v) * texV).endVertex();
+        vertexBuffer.pos(x, y, this.zLevel).tex((u) * texU, (v) * texV).endVertex();
         tessellator.draw();
     }
 
-    public void drawScaledTexturedModelRectFromIcon(int x, int y,  icon, int width, int height) {
+    public void drawScaledTexturedModelRectFromIcon(int x, int y,  IIcon icon, int width, int height) {
 
         if (icon == null) {
             return;
