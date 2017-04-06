@@ -27,6 +27,8 @@ public class GuiCoalGenerator extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         this.fontRendererObj.drawString("Coal Generator", this.xSize / 2 - this.fontRendererObj.getStringWidth("Coal Generator") / 2, 6, 4210752);
+        mc.getTextureManager().bindTexture(new ResourceLocation("tmos:textures/items/ingotAluminum.png"));
+        drawTexturedModalRect(guiLeft, guiTop, 0, 0, 16, 16);
     }
 
     @Override

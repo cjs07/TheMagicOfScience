@@ -1,12 +1,5 @@
 package com.deepwelldevelopment.tmos.repack.codechicken.lib.asm;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
@@ -14,7 +7,11 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodNode;
 
-import static com.deepwelldevelopment.tmos.repack.codechicken.lib.asm.ASMHelper.dump;
+import java.io.File;
+import java.util.*;
+
+import static com.deepwelldevelopment.tmos.repack.codechicken.lib.asm.ASMHelper.findMethod;
+import static com.deepwelldevelopment.tmos.repack.codechicken.lib.asm.ASMHelper.logger;
 
 public class ModularASMTransformer
 {

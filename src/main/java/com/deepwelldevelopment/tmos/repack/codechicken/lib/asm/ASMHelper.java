@@ -1,8 +1,17 @@
 package com.deepwelldevelopment.tmos.repack.codechicken.lib.asm;
 
-import cofh.asm.LoadingPlugin;
-import cofh.repack.codechicken.lib.config.ConfigFile;
-import cofh.repack.codechicken.lib.config.DefaultingConfigFile;
+import com.deepwelldevelopment.tmos.core.asm.TMOSLoadingPlugin;
+import com.deepwelldevelopment.tmos.repack.codechicken.lib.config.ConfigFile;
+import com.deepwelldevelopment.tmos.repack.codechicken.lib.config.DefaultingConfigFile;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.tree.*;
+import org.objectweb.asm.util.ASMifier;
+import org.objectweb.asm.util.Textifier;
+import org.objectweb.asm.util.TraceClassVisitor;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,22 +20,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.LocalVariableNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.TryCatchBlockNode;
-import org.objectweb.asm.util.ASMifier;
-import org.objectweb.asm.util.Textifier;
-import org.objectweb.asm.util.TraceClassVisitor;
 
 public class ASMHelper
 {
@@ -37,7 +30,7 @@ public class ASMHelper
         try {//weak reference for environments without FML
             File mcDir = (File)((Object[])Class.forName("cpw.mods.fml.relauncher.FMLInjectionData").getMethod("data").invoke(null))[6];
             File file = new File(mcDir, "config/CodeChickenLib.cfg");
-            if(LoadingPlugin.obfuscated)
+            if(TMOSLoadingPlugin.obfuscated)
                 return new DefaultingConfigFile(file);
             else
                 return new ConfigFile(file).setComment("CodeChickenLib development configuration file.");

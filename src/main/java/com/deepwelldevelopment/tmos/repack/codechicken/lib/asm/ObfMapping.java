@@ -1,5 +1,6 @@
 package com.deepwelldevelopment.tmos.repack.codechicken.lib.asm;
 
+import com.deepwelldevelopment.tmos.repack.codechicken.lib.config.ConfigTag;
 import com.google.common.base.Charsets;
 import com.google.common.base.Objects;
 import com.google.common.io.LineProcessor;
@@ -7,6 +8,7 @@ import com.google.common.io.Resources;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
+import net.minecraftforge.fml.relauncher.FMLInjectionData;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;

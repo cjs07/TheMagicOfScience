@@ -1,6 +1,5 @@
-package com.deepwelldevelopment.tmos.core.transformer;
+package com.deepwelldevelopment.tmos.core.asm;
 
-import com.deepwelldevelopment.tmos.core.init.TMOSLoadingPlugin;
 import com.deepwelldevelopment.tmos.core.util.tuplet.Triplet;
 import org.apache.logging.log4j.Level;
 import org.objectweb.asm.ClassReader;
@@ -50,7 +49,7 @@ public final class ASMHelper {
      * @param haystack  The instruction set to be searched in
      * @param needle    The instruction set to search for
      * @return The first instruction node from the haystack on the found position
-     * @throws com.deepwelldevelopment.tmos.core.transformer.ASMHelper.InvalidNeedleException when the needle was not found or was found multiple times
+     * @throws ASMHelper.InvalidNeedleException when the needle was not found or was found multiple times
      */
     public static AbstractInsnNode findFirstNodeFromNeedle(InsnList haystack, InsnList needle) {
         List<AbstractInsnNode> ret = InstructionComparator.insnListFindStart(haystack, needle);
@@ -68,7 +67,7 @@ public final class ASMHelper {
      * @param haystack  The instruction set to be searched in
      * @param needle    The instruction set to search for
      * @return The last instruction node from the haystack on the found position
-     * @throws com.deepwelldevelopment.tmos.core.transformer.ASMHelper.InvalidNeedleException when the needle was not found or was found multiple times
+     * @throws ASMHelper.InvalidNeedleException when the needle was not found or was found multiple times
      */
     public static AbstractInsnNode findLastNodeFromNeedle(InsnList haystack, InsnList needle) {
         List<AbstractInsnNode> ret = InstructionComparator.insnListFindEnd(haystack, needle);
@@ -106,7 +105,7 @@ public final class ASMHelper {
      * @param name      The method name to search for
      * @param desc      The method descriptor to search for
      * @return true, if the name was found, or else false
-     * @throws com.deepwelldevelopment.tmos.core.transformer.ASMHelper.MethodNotFoundException when the method name and descriptor couldn't be found
+     * @throws ASMHelper.MethodNotFoundException when the method name and descriptor couldn't be found
      */
     private static MethodNode findMethodNode(ClassNode cnode, String name, String desc) {
         for( MethodNode mnode : cnode.methods ) {

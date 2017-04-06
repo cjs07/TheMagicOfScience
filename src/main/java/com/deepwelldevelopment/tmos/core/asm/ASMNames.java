@@ -1,6 +1,5 @@
-package com.deepwelldevelopment.tmos.core.transformer;
+package com.deepwelldevelopment.tmos.core.asm;
 
-import com.deepwelldevelopment.tmos.core.init.TMOSLoadingPlugin;
 import com.deepwelldevelopment.tmos.core.util.tuplet.Triplet;
 import org.apache.logging.log4j.Level;
 

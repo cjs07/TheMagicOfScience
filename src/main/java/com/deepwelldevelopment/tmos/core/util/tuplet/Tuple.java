@@ -1,6 +1,6 @@
 package com.deepwelldevelopment.tmos.core.util.tuplet;
 
-import com.deepwelldevelopment.tmos.core.init.TMOSLoadingPlugin;
+import com.deepwelldevelopment.tmos.core.asm.TMOSLoadingPlugin;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.handler.codec.serialization.ObjectDecoderInputStream;

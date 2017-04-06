@@ -1,4 +1,4 @@
-package com.deepwelldevelopment.tmos.core.transformer;
+package com.deepwelldevelopment.tmos.core.asm;
 
 import org.objectweb.asm.tree.*;
 
