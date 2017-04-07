@@ -89,7 +89,15 @@ public class GuiBase extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        if (drawTitle && name != null) {
+            //TODO: WRITE METHODS FOR LOCALIZING NAMES
+            fontRendererObj.drawString(name, getCenteredOffset(name), 6, 0x404040);
+        }
+        if (drawInventory) {
+            //TODO: LOCALIZE THE PLAYER INVENTORY NAME AND DISPLAY IT
+        }
         drawElements(0, true);
+        drawTabs(0, true);
     }
 
     @Override
@@ -104,6 +112,7 @@ public class GuiBase extends GuiContainer {
         GL11.glPushMatrix();
         GL11.glTranslatef(guiLeft, guiTop, 0.0F);
         drawElements(partialTicks, false);
+        drawTabs(partialTicks, false);
         GL11.glPopMatrix();
     }
 
@@ -227,6 +236,12 @@ public class GuiBase extends GuiContainer {
         }
     }
 
+    /**
+     * Determines if the given x and y coordinates are contained within a slot in the GUI
+     * @param xCoord
+     * @param yCoord
+     * @return The Slot that contains the given coordinates. Returns null if there is no slot
+     */
     public Slot getSlotAtPosition(int xCoord, int yCoord) {
         for (int k = 0; k < this.inventorySlots.inventorySlots.size(); ++k) {
             Slot slot = (Slot) this.inventorySlots.inventorySlots.get(k);
@@ -238,12 +253,22 @@ public class GuiBase extends GuiContainer {
         return null;
     }
 
-    public boolean isMouseOverSlot(Slot theSlot, int xCoord, int yCoord) {
-        return this.isPointInRegion(theSlot.xPos, theSlot.yPos, 16, 16, xCoord, yCoord);
+    /**
+     * Determines if the coordinates given are contained within the given slot
+     * @param slot The slot to test for
+     * @param xCoord
+     * @param yCoord
+     * @return Returns true if the slot contains the given coordinates
+     */
+    public boolean isMouseOverSlot(Slot slot, int xCoord, int yCoord) {
+        return this.isPointInRegion(slot.xPos, slot.yPos, 16, 16, xCoord, yCoord);
     }
 
     /**
      * Draws the elements for this GUI.
+     * Generally only called from the background/foreground draw methods
+     * @param partialTick The partial tick from this frame
+     *  @param foreground Whether or not the elements are being drawn in the foreground
      */
     protected void drawElements(float partialTick, boolean foreground) {
         if (foreground) {
@@ -265,6 +290,9 @@ public class GuiBase extends GuiContainer {
 
     /**
      * Draws the tabs for this GUI. Handles Tab open/close animation.
+     * Generally only called from the background/foreground draw methods
+     * @param partialTick The partial tick from this frame
+     *  @param foreground Whether or not the elements are being drawn in the foreground
      */
     protected void drawTabs(float partialTick, boolean foreground) {
         int yPosRight = 4;
