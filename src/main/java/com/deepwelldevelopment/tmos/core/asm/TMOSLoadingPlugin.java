@@ -49,12 +49,6 @@ public class TMOSLoadingPlugin implements IFMLLoadingPlugin {
         } catch (IOException e) {
         }
         obfuscated = obf;
-        if (!obfuscated) {
-            try {
-                TMOSAccessTransformer.initForDeobf();
-            } catch (IOException e) {
-            }
-        }
         currentMcVersion = (String) FMLInjectionData.data()[4];
         minecraftDir = (File) FMLInjectionData.data()[6];
         loader = Launch.classLoader;
@@ -73,7 +67,7 @@ public class TMOSLoadingPlugin implements IFMLLoadingPlugin {
 
     @Override
     public String getAccessTransformerClass() {
-        return TMOSAccessTransformer.class.getName();
+        return null;
     }
 
     @Override
