@@ -184,10 +184,6 @@ public abstract class TabBase extends ElementBase {
         }
     }
 
-    protected void drawTabIcon(String iconName) {
-        gui.drawIcon(iconName, posXOffset(), posY + 3, 1);
-    }
-
     /**
      * Shortcut to correct for the proper X position.
      */
@@ -262,15 +258,6 @@ public abstract class TabBase extends ElementBase {
         }
 
         updateElements();
-    }
-
-    public Rectangle4i getBounds() {
-        if (isVisible()) {
-            return new Rectangle4i(posX() + gui.getGuiLeft(), posY + gui.getGuiTop(), currentWidth, currentHeight);
-        } else {
-            return new Rectangle4i(posX() + gui.getGuiLeft(), posY + gui.getGuiTop(), 0, 0);
-        }
-
     }
 
     /* Elements */
