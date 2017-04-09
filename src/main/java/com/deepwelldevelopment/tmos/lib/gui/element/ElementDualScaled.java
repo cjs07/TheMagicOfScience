@@ -41,10 +41,10 @@ public class ElementDualScaled extends ElementBase {
         }
         switch (mode) {
             case 0: //T --> B
-                drawTexturedModalRect(posX, posY, sizeX, 0, sizeX, quantity);
+                drawTexturedModalRect(posX, posY + sizeY - quantity, sizeX, sizeY - quantity, sizeX, quantity);
                 return;
             case 1: //B --> T
-                drawTexturedModalRect(posX, posY + sizeY - quantity, sizeX, sizeY - quantity, sizeX, quantity);
+                drawTexturedModalRect(posX, posY, sizeX, 0, sizeX, quantity);
                 return;
             case 2: //L --> R
                 drawTexturedModalRect(posX, posY, sizeX, 0, quantity, sizeY);

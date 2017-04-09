@@ -1,26 +1,25 @@
 package com.deepwelldevelopment.tmos.common.container;
 
 import com.deepwelldevelopment.tmos.common.tile.generator.TileGeneratorCoal;
+import com.deepwelldevelopment.tmos.core.gui.ContainerTMOSBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
-import javax.annotation.Nullable;
-
-public class ContainerCoalGenerator extends Container {
+public class ContainerCoalGenerator extends ContainerTMOSBase {
 
     TileGeneratorCoal te;
     private int ticksRemaining;
+    private int energyStored;
 
     public ContainerCoalGenerator(IInventory playerInventory, TileGeneratorCoal te) {
+        super(te);
         this.te = te;
 
         int x = 40;
@@ -28,7 +27,7 @@ public class ContainerCoalGenerator extends Container {
 
         IItemHandler itemHandler = this.te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
-        addSlotToContainer(new SlotItemHandler(itemHandler, 0, 26, 124));
+        addSlotToContainer(new SlotItemHandler(itemHandler, 0, 82, 38));
 
         // Slots for the main inventory
         for (int row = 0; row < 3; ++row) {
@@ -55,21 +54,18 @@ public class ContainerCoalGenerator extends Container {
             if (ticksRemaining != te.getField(0)) {
                 listener.sendProgressBarUpdate(this, 0, te.getField(0));
             }
+            if (energyStored != te.getField(1)) {
+                listener.sendProgressBarUpdate(this, 1, te.getField(1));
+            }
         }
         ticksRemaining = te.getField(0);
+        energyStored = te.getField(1);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int data) {
         this.te.setField(id, data);
-    }
-
-    //shift click
-    @Nullable
-    @Override
-    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-        return super.transferStackInSlot(playerIn, index);
     }
 
     @Override

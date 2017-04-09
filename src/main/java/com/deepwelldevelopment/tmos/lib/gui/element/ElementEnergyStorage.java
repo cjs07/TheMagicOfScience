@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ElementEnergyStorage extends ElementBase {
 
-    public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "Energy.png");
+    public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "energy.png");
     public static final int DEFAULT_SCALE = 42;
 
     protected IEnergyStorage storage;
@@ -63,7 +63,6 @@ public class ElementEnergyStorage extends ElementBase {
             return sizeY;
         }
         long fraction = (long) storage.getEnergyStored() * sizeY / storage.getMaxEnergyStored();
-
         return alwaysShowMinimum && storage.getEnergyStored() > 0 ? Math.max(1, MathHelper.round(fraction)) : MathHelper.round(fraction);
     }
 }

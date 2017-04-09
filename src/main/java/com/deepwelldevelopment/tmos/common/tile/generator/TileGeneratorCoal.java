@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -38,13 +39,30 @@ public class TileGeneratorCoal extends TileGeneratorBase {
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
-        currentFuelRf = nbt.getInteger("currentFuelRf");
-        currentFuelBurnTime = nbt.getInteger("currentFuelBurnTime");
+        NBTTagList nbtTagList = nbt.getTagList("items", 10);
+        for (int i = 0; i < nbtTagList.tagCount(); i++) {
+            NBTTagCompound nbtTagCompound = nbtTagList.getCompoundTagAt(i);
+            int j = nbtTagCompound.getByte("slot");
+
+            if (j >= 0 && j < itemStackHandler.getSlots()) {
+                itemStackHandler.setStackInSlot(j, new ItemStack(nbtTagCompound));
+            }
+            currentFuelRf = nbt.getInteger("currentFuelRf");
+            currentFuelBurnTime = nbt.getInteger("currentFuelBurnTime");
+        }
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
+        NBTTagList nbtTagList = new NBTTagList();
+        for (int i = 0; i < itemStackHandler.getSlots(); i++) {
+            NBTTagCompound nbtTagCompound = new NBTTagCompound();
+            nbtTagCompound.setByte("slot", (byte) i);
+            itemStackHandler.getStackInSlot(i).writeToNBT(nbtTagCompound);
+            nbtTagList.appendTag(nbtTagCompound);
+        }
+        nbt.setTag("items", nbtTagList);
         nbt.setInteger("currentFuelRf", currentFuelRf);
         nbt.setInteger("currentFuelBurnTime", currentFuelBurnTime);
         return nbt;
@@ -60,7 +78,6 @@ public class TileGeneratorCoal extends TileGeneratorBase {
 
     @Override
     public boolean canGenerate() {
-        System.out.println("[TMOS} Fuel TIcks: " + fuelTicks);
         if (fuelRf > 0 || fuelTicks > 0) {
             return true;
         }
@@ -70,14 +87,6 @@ public class TileGeneratorCoal extends TileGeneratorBase {
     @Override
     public void generate() {
         ItemStack stack = itemStackHandler.getStackInSlot(0);
-        int toStore = currentFuelRf / currentFuelBurnTime;
-        energyStorage.modifyEnergyStored(toStore);
-        System.out.println("[TMOS] Energy Stored: " + energyStorage.getEnergyStored());
-        System.out.println("[TMOS] Fuel RF: " + fuelRf);
-        System.out.println("[TMOS] Current Fuel RF Value: " + currentFuelRf);
-        System.out.println("[TMOS] Current Fuel Burn Time: " + currentFuelBurnTime);
-        fuelRf -= toStore;
-        fuelTicks--;
         if (fuelRf <= 0 && !stack.isEmpty()) {
             int energy = getEnergyValue(stack);
             fuelRf += energy;
@@ -86,6 +95,10 @@ public class TileGeneratorCoal extends TileGeneratorBase {
             currentFuelBurnTime = TileEntityFurnace.getItemBurnTime(stack);
             stack.shrink(1);
         }
+        int toStore = currentFuelRf / currentFuelBurnTime;
+        energyStorage.modifyEnergyStored(toStore);
+        fuelRf -= toStore;
+        fuelTicks--;
     }
 
     @Override
@@ -94,6 +107,11 @@ public class TileGeneratorCoal extends TileGeneratorBase {
             return true;
         }
         return super.hasCapability(capability, facing);
+    }
+
+    @Override
+    public int getInvSlotCount() {
+        return itemStackHandler.getSlots();
     }
 
     @Override

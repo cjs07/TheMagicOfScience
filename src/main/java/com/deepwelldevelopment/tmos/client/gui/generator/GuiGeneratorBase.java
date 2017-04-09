@@ -20,7 +20,7 @@ public class GuiGeneratorBase extends GuiBaseAdvanced {
     @Override
     public void initGui() {
         super.initGui();
-        addElement(new ElementEnergyStorage(this, 80, 18, tile.getEnergyStorage()));
+        addElement(new ElementEnergyStorage(this, 160, 18, tile.getEnergyStorage()));
     }
 
     @Override

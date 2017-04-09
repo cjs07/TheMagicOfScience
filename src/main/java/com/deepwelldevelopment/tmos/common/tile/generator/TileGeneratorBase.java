@@ -2,16 +2,17 @@ package com.deepwelldevelopment.tmos.common.tile.generator;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
+import cofh.api.energy.IEnergyStorage;
 import com.deepwelldevelopment.tmos.common.lib.util.ServerHelper;
 import com.deepwelldevelopment.tmos.common.lib.util.TimeTracker;
+import com.deepwelldevelopment.tmos.common.tile.TileTMOSBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 
 
-public abstract class TileGeneratorBase extends TileEntity implements IEnergyProvider, ITickable {
+public abstract class TileGeneratorBase extends TileTMOSBase implements IEnergyProvider, ITickable {
 
     protected EnergyStorage energyStorage = new EnergyStorage(0);
     protected TimeTracker tracker = new TimeTracker();
@@ -59,6 +60,8 @@ public abstract class TileGeneratorBase extends TileEntity implements IEnergyPro
         switch (id) {
             case 0:
                 return fuelRf;
+            case 1:
+                return energyStorage.getEnergyStored();
             default:
                 return 0;
         }
@@ -69,6 +72,9 @@ public abstract class TileGeneratorBase extends TileEntity implements IEnergyPro
             case 0:
                 this.fuelRf = value;
                 break;
+            case 1:
+                energyStorage.setEnergyStored(value);
+                break;
         }
     }
 
@@ -76,56 +82,13 @@ public abstract class TileGeneratorBase extends TileEntity implements IEnergyPro
         return 0;
     }
 
-    public EnergyStorage getEnergyStorage() {
+    public IEnergyStorage getEnergyStorage() {
         return energyStorage;
     }
 
     public abstract boolean canGenerate();
 
     public abstract void generate();
-
-//    /* NETWORK METHODS */
-//    @Override
-//    public PacketTMOSBase getPacket() {
-//
-//        PacketCoFHBase payload = super.getPacket();
-//
-//        payload.addByte(facing);
-//        payload.addBool(augmentRedstoneControl);
-//
-//        return payload;
-//    }
-//
-//    @Override
-//    public PacketTMOSBase getGuiPacket() {
-//
-//        PacketTMOSBase payload = super.getGuiPacket();
-//
-//        payload.addInt(energyStorage.getMaxEnergyStored());
-//        payload.addInt(energyStorage.getEnergyStored());
-//        payload.addInt(fuelRf);
-//
-//        payload.addBool(augmentRedstoneControl);
-//
-//        return payload;
-//    }
-//
-//    @Override
-//    protected void handleGuiPacket(PacketTMOSBase payload) {
-//        super.handleGuiPacket(payload);
-//
-//        energyStorage.setCapacity(payload.getInt());
-//        energyStorage.setEnergyStored(payload.getInt());
-//        fuelRf = payload.getInt();
-//
-//        boolean prevControl = augmentRedstoneControl;
-//        augmentRedstoneControl = payload.getBool();
-//
-//        if (augmentRedstoneControl != prevControl) {
-//            onInstalled();
-//            sendUpdatePacket(Side.SERVER);
-//        }
-//    }
 
     /* IEnergyProvider */
     @Override

@@ -59,7 +59,6 @@ public class GuiBase extends GuiContainer {
     }
 
     public GuiBase(Container container, ResourceLocation texture) {
-
         super(container);
         this.texture = texture;
     }
@@ -76,13 +75,13 @@ public class GuiBase extends GuiContainer {
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        if (tooltips && mc.player.inventory.getItemStack() == null) {
+        if (tooltips && mc.player.inventory.getItemStack().isEmpty()) {
             addTooltips(tooltip);
             drawTooltip(tooltip);
         }
 
-        this.mouseX = mouseX;
-        this.mouseY = mouseY;
+        this.mouseX = mouseX - guiLeft;
+        this.mouseY = mouseY - guiTop;
 
         updateElements();
     }
@@ -106,8 +105,8 @@ public class GuiBase extends GuiContainer {
         mc.renderEngine.bindTexture(texture);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
-        this.mouseX = mouseX;
-        this.mouseY = mouseY;
+        this.mouseX = mouseX - guiLeft;
+        this.mouseY = mouseY - guiTop;
 
         GL11.glPushMatrix();
         GL11.glTranslatef(guiLeft, guiTop, 0.0F);
@@ -132,7 +131,6 @@ public class GuiBase extends GuiContainer {
 
     @Override
     public void handleMouseInput() throws IOException {
-
         int x = Mouse.getEventX() * width / mc.displayWidth;
         int y = height - Mouse.getEventY() * height / mc.displayHeight - 1;
 
@@ -609,7 +607,6 @@ public class GuiBase extends GuiContainer {
 
     @SuppressWarnings("rawtypes")
     protected void drawTooltipHoveringText(List list, int x, int y, FontRenderer font) {
-
         if (list == null || list.isEmpty()) {
             return;
         }
@@ -669,6 +666,7 @@ public class GuiBase extends GuiContainer {
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+        System.out.println("[TMOS] Drawing tooltips");
     }
 
     /**
