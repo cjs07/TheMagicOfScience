@@ -1,6 +1,6 @@
 package com.deepwelldevelopment.tmos.client;
 
-import com.deepwelldevelopment.tmos.client.gui.GuiCoalGenerator;
+import com.deepwelldevelopment.tmos.client.gui.generator.GuiCoalGenerator;
 import com.deepwelldevelopment.tmos.client.gui.GuiWorkbench;
 import com.deepwelldevelopment.tmos.common.container.ContainerCoalGenerator;
 import com.deepwelldevelopment.tmos.common.container.ContainerWorkbench;
@@ -35,7 +35,7 @@ public class GuiHandler implements IGuiHandler {
         }
         if (te instanceof TileGeneratorCoal) {
             TileGeneratorCoal containerTileEntity = (TileGeneratorCoal)te;
-            return new GuiCoalGenerator(containerTileEntity, new ContainerCoalGenerator(player.inventory, containerTileEntity));
+            return new GuiCoalGenerator(player.inventory, containerTileEntity);
         }
         return null;
     }

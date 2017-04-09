@@ -1,4 +1,4 @@
-package com.deepwelldevelopment.tmos.lib.helper;
+package com.deepwelldevelopment.tmos.lib.util.helper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;

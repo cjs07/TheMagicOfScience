@@ -12,6 +12,8 @@ import net.minecraft.util.ResourceLocation;
  */
 public class GuiBaseAdvanced extends GuiBase {
 
+    public static final String TEX_FLAME = GuiProps.PATH_ELEMENTS + "flame.png";
+
     public GuiBaseAdvanced(Container inventorySlotsIn) {
         super(inventorySlotsIn);
     }

@@ -3,8 +3,8 @@ package com.deepwelldevelopment.tmos.lib.gui.element;
 import cofh.api.energy.IEnergyStorage;
 import com.deepwelldevelopment.tmos.lib.gui.GuiBase;
 import com.deepwelldevelopment.tmos.lib.gui.GuiProps;
-import com.deepwelldevelopment.tmos.lib.helper.MathHelper;
-import com.deepwelldevelopment.tmos.lib.helper.RenderHelper;
+import com.deepwelldevelopment.tmos.lib.util.helper.MathHelper;
+import com.deepwelldevelopment.tmos.lib.util.helper.RenderHelper;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;

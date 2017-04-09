@@ -3,6 +3,7 @@ package com.deepwelldevelopment.tmos.common.container;
 import com.deepwelldevelopment.tmos.common.tile.generator.TileGeneratorCoal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -17,6 +18,7 @@ import javax.annotation.Nullable;
 public class ContainerCoalGenerator extends Container {
 
     TileGeneratorCoal te;
+    private int ticksRemaining;
 
     public ContainerCoalGenerator(IInventory playerInventory, TileGeneratorCoal te) {
         this.te = te;
@@ -26,7 +28,7 @@ public class ContainerCoalGenerator extends Container {
 
         IItemHandler itemHandler = this.te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
-        addSlotToContainer(new SlotItemHandler(itemHandler, 0, 124, 26));
+        addSlotToContainer(new SlotItemHandler(itemHandler, 0, 26, 124));
 
         // Slots for the main inventory
         for (int row = 0; row < 3; ++row) {
@@ -48,6 +50,13 @@ public class ContainerCoalGenerator extends Container {
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
+        for (int i = 0; i < this.listeners.size(); i++) {
+            IContainerListener listener = this.listeners.get(i);
+            if (ticksRemaining != te.getField(0)) {
+                listener.sendProgressBarUpdate(this, 0, te.getField(0));
+            }
+        }
+        ticksRemaining = te.getField(0);
     }
 
     @Override

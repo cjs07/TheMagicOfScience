@@ -9,30 +9,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
 
 public abstract class TileGeneratorBase extends TileEntity implements IEnergyProvider, ITickable {
 
-    public static final int SIZE = 2;
-
     protected EnergyStorage energyStorage = new EnergyStorage(0);
     protected TimeTracker tracker = new TimeTracker();
 
-    int fuelRF;
+    int fuelRf;
     int fuelTicks;
-    int rfPerTick;
-
-    private ItemStackHandler itemStackHandler = new ItemStackHandler(SIZE) {
-        @Override
-        protected void onContentsChanged(int slot) {
-            // We need to tell the tile entity that something has changed so
-            // that the chest contents is persisted
-            TileGeneratorBase.this.markDirty();
-        }
-    };
 
     public TileGeneratorBase(int maxEnergy, int maxPower) {
         energyStorage = new EnergyStorage(maxEnergy, maxPower * 2);
@@ -42,13 +27,16 @@ public abstract class TileGeneratorBase extends TileEntity implements IEnergyPro
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
         energyStorage.readFromNBT(nbt);
+        fuelRf = nbt.getInteger("fuelRf");
+        fuelTicks = nbt.getInteger("fuelTicks");
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
         energyStorage.writeToNBT(nbt);
-
+        nbt.setInteger("fuelRf", fuelRf);
+        nbt.setInteger("fuelTicks", fuelTicks);
         return nbt;
     }
 
@@ -58,32 +46,19 @@ public abstract class TileGeneratorBase extends TileEntity implements IEnergyPro
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return true;
-        }
-        return super.hasCapability(capability, facing);
-    }
-
-    @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return (T) itemStackHandler;
-        }
-        return super.getCapability(capability, facing);
-    }
-
-    @Override
     public void update() {
         if (ServerHelper.isServerWorld(world)) {
-
-
-            markDirty();
+            if(canGenerate()) {
+                generate();
+            }
         }
+        markDirty();
     }
 
     public int getField(int id) {
         switch (id) {
+            case 0:
+                return fuelRf;
             default:
                 return 0;
         }
@@ -91,8 +66,23 @@ public abstract class TileGeneratorBase extends TileEntity implements IEnergyPro
 
     public void setField(int id, int value) {
         switch (id) {
+            case 0:
+                this.fuelRf = value;
+                break;
         }
     }
+
+    public int getScaledDuration(int scale) {
+        return 0;
+    }
+
+    public EnergyStorage getEnergyStorage() {
+        return energyStorage;
+    }
+
+    public abstract boolean canGenerate();
+
+    public abstract void generate();
 
 //    /* NETWORK METHODS */
 //    @Override
@@ -113,7 +103,7 @@ public abstract class TileGeneratorBase extends TileEntity implements IEnergyPro
 //
 //        payload.addInt(energyStorage.getMaxEnergyStored());
 //        payload.addInt(energyStorage.getEnergyStored());
-//        payload.addInt(fuelRF);
+//        payload.addInt(fuelRf);
 //
 //        payload.addBool(augmentRedstoneControl);
 //
@@ -126,7 +116,7 @@ public abstract class TileGeneratorBase extends TileEntity implements IEnergyPro
 //
 //        energyStorage.setCapacity(payload.getInt());
 //        energyStorage.setEnergyStored(payload.getInt());
-//        fuelRF = payload.getInt();
+//        fuelRf = payload.getInt();
 //
 //        boolean prevControl = augmentRedstoneControl;
 //        augmentRedstoneControl = payload.getBool();

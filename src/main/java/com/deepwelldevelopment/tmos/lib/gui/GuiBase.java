@@ -4,7 +4,7 @@ import com.deepwelldevelopment.tmos.core.reflection.ReflectionFields;
 import com.deepwelldevelopment.tmos.lib.gui.element.ElementBase;
 import com.deepwelldevelopment.tmos.lib.gui.element.TabBase;
 import com.deepwelldevelopment.tmos.lib.gui.slot.SlotFalseCopy;
-import com.deepwelldevelopment.tmos.lib.helper.RenderHelper;
+import com.deepwelldevelopment.tmos.lib.util.helper.RenderHelper;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
