@@ -14,6 +14,5 @@ public class TMOSBlocks {
     public static Block oreIridium;
     public static Block oreChromium;
 
-    public static Block tmosWorkbench;
     public static Block coalGenerator;
 }

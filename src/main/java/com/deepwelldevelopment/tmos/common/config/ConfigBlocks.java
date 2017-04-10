@@ -1,7 +1,6 @@
 package com.deepwelldevelopment.tmos.common.config;
 
 import com.deepwelldevelopment.tmos.common.block.BlockGenerator;
-import com.deepwelldevelopment.tmos.common.block.BlockWorkbench;
 import com.deepwelldevelopment.tmos.common.block.TMOSOre;
 import com.deepwelldevelopment.tmos.common.item.ItemOreDict;
 import net.minecraft.block.Block;
@@ -37,7 +36,6 @@ public class ConfigBlocks {
         oreIridium.setHarvestLevel("pickaxe", Item.ToolMaterial.DIAMOND.getHarvestLevel());
         oreChromium.setHarvestLevel("pickaxe", Item.ToolMaterial.DIAMOND.getHarvestLevel());
 
-        tmosWorkbench = registerBlock(new BlockWorkbench());
         coalGenerator = registerBlock(new BlockGenerator("generatorCoal"));
     }
 

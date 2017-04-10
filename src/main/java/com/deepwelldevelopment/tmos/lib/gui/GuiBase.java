@@ -223,7 +223,7 @@ public class GuiBase extends GuiContainer {
         Slot slot = getSlotAtPosition(mX, mY);
         ItemStack itemstack = this.mc.player.inventory.getItemStack();
 
-        if (this.dragSplitting && slot != null && itemstack != null && slot instanceof SlotFalseCopy) {
+        if (this.dragSplitting && slot != null && itemstack.isEmpty() && slot instanceof SlotFalseCopy) {
             if (lastIndex != slot.slotNumber) {
                 lastIndex = slot.slotNumber;
                 this.handleMouseClick(slot, slot.slotNumber, 0, ClickType.PICKUP);
@@ -236,8 +236,8 @@ public class GuiBase extends GuiContainer {
 
     /**
      * Determines if the given x and y coordinates are contained within a slot in the GUI
-     * @param xCoord
-     * @param yCoord
+     * @param xCoord x-coordinate
+     * @param yCoord y-coordinate
      * @return The Slot that contains the given coordinates. Returns null if there is no slot
      */
     public Slot getSlotAtPosition(int xCoord, int yCoord) {
@@ -254,8 +254,8 @@ public class GuiBase extends GuiContainer {
     /**
      * Determines if the coordinates given are contained within the given slot
      * @param slot The slot to test for
-     * @param xCoord
-     * @param yCoord
+     * @param xCoord x-coordinate
+     * @param yCoord y-coordinate
      * @return Returns true if the slot contains the given coordinates
      */
     public boolean isMouseOverSlot(Slot slot, int xCoord, int yCoord) {
@@ -329,17 +329,6 @@ public class GuiBase extends GuiContainer {
                 }
             }
         }
-    }
-
-    /**
-     * Called by NEI if installed
-     */
-    // @Override
-    public List<String> handleTooltip(int mousex, int mousey, List<String> tooltip) {
-        if (mc.player.inventory.getItemStack() == null) {
-            addTooltips(tooltip);
-        }
-        return tooltip;
     }
 
     public void addTooltips(List<String> tooltip) {
@@ -593,10 +582,10 @@ public class GuiBase extends GuiContainer {
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vertexBuffer = tessellator.getBuffer();
         vertexBuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexBuffer.pos(x + 0, y + height, this.zLevel).tex(textureX, textureY + (maxTextureY - textureY) * height / 16F).endVertex();
+        vertexBuffer.pos(x, y + height, this.zLevel).tex(textureX, textureY + (maxTextureY - textureY) * height / 16F).endVertex();
         vertexBuffer.pos(x + width, y + height, this.zLevel).tex(textureX + (maxTextureX - textureX) * width / 16F, textureY + (maxTextureY - textureY) * height / 16F).endVertex();
-        vertexBuffer.pos(x + width, y + 0, this.zLevel).tex(textureX + (maxTextureX - textureX) * width / 16F, textureY).endVertex();
-        vertexBuffer.pos(x + 0, y + 0, this.zLevel).tex(textureX, textureY).endVertex();
+        vertexBuffer.pos(x + width, y, this.zLevel).tex(textureX + (maxTextureX - textureX) * width / 16F, textureY).endVertex();
+        vertexBuffer.pos(x, y, this.zLevel).tex(textureX, textureY).endVertex();
         tessellator.draw();
     }
 
@@ -666,7 +655,6 @@ public class GuiBase extends GuiContainer {
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        System.out.println("[TMOS] Drawing tooltips");
     }
 
     /**
