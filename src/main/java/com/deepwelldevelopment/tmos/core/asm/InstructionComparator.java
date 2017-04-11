@@ -1,5 +1,6 @@
 package com.deepwelldevelopment.tmos.core.asm;
 
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.*;
 
 import java.util.HashMap;
@@ -9,10 +10,8 @@ import java.util.List;
 
 import static org.objectweb.asm.tree.AbstractInsnNode.*;
 
-public class InstructionComparator {
-
-
-
+public final class InstructionComparator
+{
     public static boolean fieldInsnEqual(FieldInsnNode insn1, FieldInsnNode insn2) {
         return insn1.owner.equals(insn2.owner) && insn1.name.equals(insn2.name) && insn1.desc.equals(insn2.desc);
     }
@@ -24,7 +23,7 @@ public class InstructionComparator {
 
         HashMap<LabelNode, LabelNode> labels = new HashMap<>();
 
-        for(AbstractInsnNode insn = list.getFirst(); insn != null; insn = insn.getNext() ) {
+        for( AbstractInsnNode insn = list.getFirst(); insn != null; insn = insn.getNext() ) {
             if( insn instanceof LabelNode ) {
                 labels.put((LabelNode) insn, (LabelNode) insn);
             }
@@ -33,7 +32,7 @@ public class InstructionComparator {
         InsnList importantNodeList = new InsnList();
 
         for( AbstractInsnNode insn = list.getFirst(); insn != null; insn = insn.getNext() ) {
-            if( insn instanceof LabelNode || insn instanceof LineNumberNode) {
+            if( insn instanceof LabelNode || insn instanceof LineNumberNode ) {
                 continue;
             }
 

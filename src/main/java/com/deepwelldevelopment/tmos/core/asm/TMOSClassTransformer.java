@@ -4,8 +4,6 @@ import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 
 import static com.deepwelldevelopment.tmos.core.asm.ASMCore.hashes;
-import static com.deepwelldevelopment.tmos.core.asm.ASMCore.parsables;
-import static com.deepwelldevelopment.tmos.core.asm.ASMCore.parse;
 
 public class TMOSClassTransformer implements IClassTransformer {
 
@@ -24,10 +22,6 @@ public class TMOSClassTransformer implements IClassTransformer {
     public byte[] transform(String name, String transformedName, byte[] bytes) {
         if (bytes == null) {
             return null;
-        }
-
-        if (scrappedData && parsables.contains(name)) {
-            bytes = parse(name, transformedName, bytes);
         }
 
         int index = hashes.get(transformedName);

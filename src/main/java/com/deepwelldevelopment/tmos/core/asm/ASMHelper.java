@@ -49,7 +49,6 @@ public final class ASMHelper {
      * @param haystack  The instruction set to be searched in
      * @param needle    The instruction set to search for
      * @return The first instruction node from the haystack on the found position
-     * @throws ASMHelper.InvalidNeedleException when the needle was not found or was found multiple times
      */
     public static AbstractInsnNode findFirstNodeFromNeedle(InsnList haystack, InsnList needle) {
         List<AbstractInsnNode> ret = InstructionComparator.insnListFindStart(haystack, needle);
@@ -67,7 +66,6 @@ public final class ASMHelper {
      * @param haystack  The instruction set to be searched in
      * @param needle    The instruction set to search for
      * @return The last instruction node from the haystack on the found position
-     * @throws ASMHelper.InvalidNeedleException when the needle was not found or was found multiple times
      */
     public static AbstractInsnNode findLastNodeFromNeedle(InsnList haystack, InsnList needle) {
         List<AbstractInsnNode> ret = InstructionComparator.insnListFindEnd(haystack, needle);
@@ -105,7 +103,6 @@ public final class ASMHelper {
      * @param name      The method name to search for
      * @param desc      The method descriptor to search for
      * @return true, if the name was found, or else false
-     * @throws ASMHelper.MethodNotFoundException when the method name and descriptor couldn't be found
      */
     private static MethodNode findMethodNode(ClassNode cnode, String name, String desc) {
         for( MethodNode mnode : cnode.methods ) {
@@ -124,7 +121,7 @@ public final class ASMHelper {
      * @return The right name appropriate to the environment
      */
     public static String getRemappedMF(String mcp, String srg) {
-        if( ASMHelper.isMCP ) {
+        if(ASMHelper.isMCP ) {
             return mcp;
         }
         return srg;
