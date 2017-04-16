@@ -1,15 +1,25 @@
 package com.deepwelldevelopment.tmos.common.capability;
 
-import com.deepwelldevelopment.tmos.transport.core.transmitter.IGridTransmitter;
+import cofh.api.energy.IEnergyProvider;
+import cofh.api.energy.IEnergyReceiver;
+import cofh.api.energy.IEnergyStorage;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
 public class Capabilities {
 
-    @CapabilityInject(IGridTransmitter.class)
-    public static Capability<IGridTransmitter> GRID_TRANSMITTER_CAPABILITY = null;
+    @CapabilityInject(IEnergyStorage.class)
+    public static Capability<IEnergyStorage> ENERGY_STORAGE_CAPABILITY = null;
+
+    @CapabilityInject(IEnergyReceiver.class)
+    public static Capability<IEnergyReceiver> ENERGY_ACCEPTOR_CAPABILITY = null;
+
+    @CapabilityInject(IEnergyProvider.class)
+    public static Capability<IEnergyProvider> ENERGY_OUTPUTTER_CAPABILITY = null;
 
     public static void registerCapabilities() {
-        DefaultGridTransmitter.register();
+        DefaultEnergyStorage.register();
+        DefaultEnergyAcceptor.register();
+        DefaultCableOutputter.register();
     }
 }

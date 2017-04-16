@@ -4,7 +4,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
-public final class CapabilityUtil {
+public final class CapabilityUtils {
 
     public static boolean hasCapability(ICapabilityProvider provider, Capability<?> cap, EnumFacing side) {
         if (provider == null || cap == null) return false;
