@@ -1,9 +1,9 @@
 package com.deepwelldevelopment.tmos.api.energy;
 
 public class EnergyStack {
-    public double amount;
+    public int amount;
 
-    public EnergyStack(double newAmount) {
-        amount = newAmount;
+    public EnergyStack(int amount) {
+        this.amount = amount;
     }
 }

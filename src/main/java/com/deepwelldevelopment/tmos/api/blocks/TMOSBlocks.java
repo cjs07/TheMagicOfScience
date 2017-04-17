@@ -15,4 +15,6 @@ public class TMOSBlocks {
     public static Block oreChromium;
 
     public static Block coalGenerator;
+
+    public static Block cable;
 }

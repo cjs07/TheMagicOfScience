@@ -11,7 +11,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import javax.annotation.Nullable;
 
@@ -23,8 +22,6 @@ public class BlockGenerator extends TMOSBlock implements ITileEntityProvider {
 
     public BlockGenerator(String name) {
         super(Material.ANVIL, name);
-
-        GameRegistry.registerTileEntity(TileGeneratorCoal.class, TMOS.modId  + "_generatorcoal");
     }
 
     @Nullable

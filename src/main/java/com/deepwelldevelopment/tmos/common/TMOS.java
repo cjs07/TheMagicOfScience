@@ -10,6 +10,8 @@ import com.deepwelldevelopment.tmos.common.lib.crafting.TMOSSmeltingRecipes;
 import com.deepwelldevelopment.tmos.common.lib.event.TMOSEventHandler;
 import com.deepwelldevelopment.tmos.common.lib.network.TMOSPacketHandler;
 import com.deepwelldevelopment.tmos.common.lib.world.TMOSWorldGen;
+import com.deepwelldevelopment.tmos.common.tile.generator.TileGeneratorCoal;
+import com.deepwelldevelopment.tmos.transport.core.TileEnergyTransmitter;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -55,6 +57,8 @@ public class TMOS {
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
         MinecraftForge.EVENT_BUS.register(new TMOSEventHandler());
         packetHandler.init();
+        GameRegistry.registerTileEntity(TileGeneratorCoal.class, TMOS.modId  + "_generatorcoal");
+        GameRegistry.registerTileEntity(TileEnergyTransmitter.class, modId + "_energytransmitter");
     }
 
     @Mod.EventHandler

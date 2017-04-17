@@ -3,6 +3,7 @@ package com.deepwelldevelopment.tmos.common.config;
 import com.deepwelldevelopment.tmos.common.block.BlockGenerator;
 import com.deepwelldevelopment.tmos.common.block.TMOSOre;
 import com.deepwelldevelopment.tmos.common.item.ItemOreDict;
+import com.deepwelldevelopment.tmos.transport.core.BlockTransport;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -37,6 +38,8 @@ public class ConfigBlocks {
         oreChromium.setHarvestLevel("pickaxe", Item.ToolMaterial.DIAMOND.getHarvestLevel());
 
         coalGenerator = registerBlock(new BlockGenerator("generatorCoal"));
+
+        cable = registerBlock(new BlockTransport());
     }
 
     private static <T extends Block>T registerBlock(T block, ItemBlock itemBlock) {
