@@ -5,14 +5,16 @@ import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyStorage;
 import com.deepwelldevelopment.tmos.common.lib.util.ServerHelper;
 import com.deepwelldevelopment.tmos.common.lib.util.TimeTracker;
-import com.deepwelldevelopment.tmos.common.tile.TileTMOSBase;
+import com.deepwelldevelopment.tmos.lib.tile.ITileCommunicator;
+import com.deepwelldevelopment.tmos.lib.tile.TileCommunicatorBase;
+import com.deepwelldevelopment.tmos.lib.tile.packet.PacketTileBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 
 
-public abstract class TileGeneratorBase extends TileTMOSBase implements IEnergyProvider, ITickable {
+public abstract class TileGeneratorBase extends TileCommunicatorBase implements IEnergyProvider, ITickable {
 
     protected EnergyStorage energyStorage = new EnergyStorage(0);
     protected TimeTracker tracker = new TimeTracker();
@@ -89,6 +91,22 @@ public abstract class TileGeneratorBase extends TileTMOSBase implements IEnergyP
     public abstract boolean canGenerate();
 
     public abstract void generate();
+
+    /* ITileCommunicator */
+    @Override
+    public void sendPacket(ITileCommunicator dest, PacketTileBase packet) {
+
+    }
+
+    @Override
+    public void receivePacket(PacketTileBase packet) {
+
+    }
+
+    @Override
+    public void receiveReturnedPacket(PacketTileBase packet) {
+
+    }
 
     /* IEnergyProvider */
     @Override
